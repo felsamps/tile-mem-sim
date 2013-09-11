@@ -72,42 +72,34 @@ MotionEstimationData* TraceFileHandler::parseNextFrame() {
 				break;
 				
 			case 'p':
-				if(sizePart == 0) {
-					cuData->insertPU(puData);
-				}
+				cuData->insertPU(puData);
 				break;
 				
 			case 'F':	/*TZ First Search*/
 				fp >> xFS >> yFS;
-				if( sizePart == 0 ) {
-					entry = new Entry();
-					entry->opcode = command;
-					entry->xFS = xCU + xFS;
-					entry->yFS = yCU + yFS;
-					puData->insertEntry(entry);
-				}
+				entry = new Entry();
+				entry->opcode = command;
+				entry->xFS = xCU + xFS;
+				entry->yFS = yCU + yFS;
+				puData->insertEntry(entry);
 				break;
 			case 'C':	/*TZ Candidate Search*/
 				fp >> xCand >> yCand;
-				if( sizePart == 0 ) {
-					entry = new Entry();
-					entry->opcode = command;
-					entry->xCand = xCU + xCand;
-					entry->yCand = yCU + yCand;
-					puData->insertEntry(entry);
-				}
+				entry = new Entry();
+				entry->opcode = command;
+				entry->xCand = xCU + xCand;
+				entry->yCand = yCU + yCand;
+				puData->insertEntry(entry);
 				break;
 			case 'R':	/*TZ Raster Search*/
 				fp >> xLeft >> xRight >> yTop >> yBottom;
-				if( sizePart == 0 ) {
-					entry = new Entry();
-					entry->opcode = command;
-					entry->xLeft = xCU + xLeft;
-					entry->xRight = xCU + xRight;
-					entry->yTop = yCU + yTop;
-					entry->yBottom = yCU + yBottom;
-					puData->insertEntry(entry);
-				}
+				entry = new Entry();
+				entry->opcode = command;
+				entry->xLeft = xCU + xLeft;
+				entry->xRight = xCU + xRight;
+				entry->yTop = yCU + yTop;
+				entry->yBottom = yCU + yBottom;
+				puData->insertEntry(entry);
 				break;
 		}
 		

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="80">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <df name="inc" root="inc">
+      <in>CTUData.h</in>
+      <in>CUData.h</in>
+      <in>Entry.h</in>
+      <in>MotionEstimationData.h</in>
+      <in>PUData.h</in>
+      <in>TileAccessAnalyzer.h</in>
+      <in>TileData.h</in>
+      <in>TraceFileHandler.h</in>
+      <in>TypeDefs.h</in>
+    </df>
+    <df name="src" root="src">
+      <in>CTUData.cpp</in>
+      <in>CUData.cpp</in>
+      <in>MotionEstimationData.cpp</in>
+      <in>PUData.cpp</in>
+      <in>TileAccessAnalyzer.cpp</in>
+      <in>TileData.cpp</in>
+      <in>TraceFileHandler.cpp</in>
+      <in>main.cpp</in>
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
+  <sourceRootList>
+    <Elem>src</Elem>
+    <Elem>inc</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>default</compilerSet>
+      </toolsSet>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>.</buildCommandWorkingDir>
+          <buildCommand>${MAKE} -f Makefile</buildCommand>
+          <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
+          <executablePath></executablePath>
+          <ccTool>
+            <incDir>
+              <pElem>.</pElem>
+            </incDir>
+          </ccTool>
+        </makeTool>
+      </makefileType>
+    </conf>
+  </confs>
+</configurationDescriptor>

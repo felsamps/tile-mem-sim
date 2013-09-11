@@ -12,12 +12,27 @@ CUData::CUData(Int x, Int y, Int depth) {
 
 void CUData::insertPU(PUData* pu) {
 	Int idRefFrame = pu->getIdRefFrame();
-	this->refsPU[idRefFrame] = pu;	
+	list<PUData*> newL;
+	if(this->refsPU.find(idRefFrame) == this->refsPU.end()) {
+		newL.push_back(pu);
+		this->refsPU[idRefFrame] = newL;
+	}
+	else {
+		this->refsPU[idRefFrame].push_back(pu);
+	}
+	
 }
 
 PUData* CUData::getPU(Int idRefFrame) {
 	if( this->refsPU.find(idRefFrame) != this->refsPU.end() ) {
-		return this->refsPU[idRefFrame];
+		if( this->refsPU[idRefFrame].empty() ) {
+			return NULL;
+		}
+		else {
+			PUData* returnable = this->refsPU[idRefFrame].front();
+			this->refsPU[idRefFrame].pop_front();
+			return returnable;
+		}
 	}
 	else {
 		return NULL;

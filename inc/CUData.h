@@ -12,7 +12,7 @@ using namespace std;
 
 class CUData {
 private:
-    map<Int, PUData*> refsPU;
+    map<Int, list<PUData*> > refsPU;
     Int size, depth, x, y;
 public:
     CUData(Int x, Int y, Int depth);
