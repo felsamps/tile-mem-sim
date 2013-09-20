@@ -4,6 +4,7 @@
 #include <fstream>
 #include <vector>
 #include <map>
+#include <cmath>
 
 #include "MotionEstimationData.h"
 #include "TypeDefs.h"
@@ -18,8 +19,9 @@ class TraceFileHandler {
 private:
 	fstream fp;
 	
-	Int wFrame;
-	Int hFrame;
+	Int numOfFrames;
+	Int wFrame, wFrameInCTU, wFrameInCU32;
+	Int hFrame, hFrameInCTU, hFrameInCU32;
 	Int numTileColumns;
 	Int numTileRows;
 	Int searchRange;
@@ -31,9 +33,9 @@ private:
 	MotionEstimationData* xGetMotionEstimationDataEntry(Int idRefFrame);
     
 public:
-	TraceFileHandler(string name);
+	TraceFileHandler(string name, Int numOfFrames);
 	MotionEstimationData* parseNextFrame();
-    
+	
 	Int getNumHorTilesBoundaries() const;
     Int getNumVerTilesBoundaries() const;
     Int getNumOfTiles() const;
@@ -42,6 +44,12 @@ public:
     Int getNumTileColumns() const;
     Int getHFrame() const;
     Int getWFrame() const;
+    void setHFrameInCU32(Int hFrameInCU32);
+    Int getHFrameInCU32() const;
+    Int getWFrameInCU32() const;
+    Int getWFrameInCTU() const;
+    Int getHFrameInCTU() const;
+    Int getNumOfFrames() const;
 };
 
 #endif	/* TRACEFILEHANDLER_H */

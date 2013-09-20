@@ -14,3 +14,7 @@
 
 # Other files
 tile-sim
+*.csv
+*.xlsx
+*.sh
+

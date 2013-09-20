@@ -9,12 +9,14 @@ class TileAccessAnalyzer {
 private:
 	TraceFileHandler* tfh;
 	
+	vector<vector<LLInt> > accumMemPressVec;
+	
 	/*memory access counters*/
 	long long int accAccum;	
 	
 	void xAnalyzePUAccess(CUData* cu, PUData* pu);
 	Int xGetNumOfAcc(CUData* cu, PUData* pu);
-	void xReportAndResetCounters();
+	void xReportAndResetCounters(Int idCurrFrame);
 public:
 	TileAccessAnalyzer(TraceFileHandler* tfh);
 	

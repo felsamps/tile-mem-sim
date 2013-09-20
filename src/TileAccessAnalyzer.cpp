@@ -6,11 +6,14 @@
 #define NUM_TZ_FIRST_SEARCH_96 76
 #define NUM_TZ_FIRST_SEARCH_128 76
 
-Int TZ_SEARCH_CANDIDATES[76][2] = {{0,-1}, {-1,0}, {1,0}, {0,1}, {0,-2}, {-1,-1}, {1,-1}, {-2,0}, {2,0}, {-1,1}, {1,1}, {0,2}, {0,-4}, {-2,-2}, {2,-2}, {-4,0}, {4,0}, {-2,2}, {2,2}, {0,4}, {0,-8}, {-4,-4}, {4,-4}, {-8,0}, {8,0}, {-4,4}, {4,4}, {0,8}, {0,-16}, {-16,0}, {16,0}, {0,16}, {-4,-12}, {4,-12}, {-4,12}, {4,12}, {-8,-8}, {8,-8}, {-8,8}, {8,8}, {-12,-4}, {12,-4}, {-12,4}, {12,4}, {0,-32}, {-32,0}, {32,0}, {0,32}, {-8,-24}, {8,-24}, {-8,24}, {8,24}, {-16,-16}, {16,-16}, {-16,16}, {16,16}, {-24,-8}, {24,-8}, {-24,8}, {24,8}, {0,-64}, {-64,0}, {64,0}, {0,64}, {-16,-48}, {16,-48}, {-16,48}, {16,48}, {-32,-32}, {32,-32}, {-32,32}, {32,32}, {-48,-16}, {48,-16}, {-48,16}, {48,16}};
+extern Int TZ_SEARCH_CANDIDATES[76][2];
 
 TileAccessAnalyzer::TileAccessAnalyzer(TraceFileHandler* tfh) {
 	this->tfh = tfh;	
 	this->accAccum = 0;
+	accumMemPressVec.clear();
+	accumMemPressVec.resize(tfh->getNumOfTiles());
+	
 }
 
 
@@ -81,13 +84,13 @@ void TileAccessAnalyzer::xAnalyzePUAccess(CUData* cu, PUData* pu) {
 void TileAccessAnalyzer::analyze() {
 	MotionEstimationData* me;
 	me = this->tfh->parseNextFrame();
-
+	
 	while(me != NULL) {
-		cout << "INIT ME..." << endl;
 		for (int t = 0; t < this->tfh->getNumOfTiles(); t++) {
 			TileData* tile = me->getTile(t);
 			for (int idCTU = 0; idCTU < tile->getNumOfCTU(); idCTU++) {
 				CTUData* ctu = tile->getCTU(idCTU);
+				
 				for (int idCU = 0; idCU < ctu->getNumOfCU(); idCU++) {
 					CUData* cu = ctu->getCU(idCU);
 					set<Int> refFrames = me->getRefFrames();
@@ -100,16 +103,56 @@ void TileAccessAnalyzer::analyze() {
 						}
 					}
 				}
-				xReportAndResetCounters();
+				this->accumMemPressVec[t].push_back(this->accAccum);
+				this->accAccum = 0;
 			}
-			cout << endl;
+			
 		}
+		xReportAndResetCounters(me->getIdCurrFrame());
 		me = this->tfh->parseNextFrame();
 	}
 }
 
 
-void TileAccessAnalyzer::xReportAndResetCounters() {
-	cout << this->accAccum << " ";
-	this->accAccum = 0;
+void TileAccessAnalyzer::xReportAndResetCounters(Int idCurrFrame) {
+	Int maxSize = 0;
+	vector<Int> accumPress;
+	for (int i = 0; i < this->tfh->getNumOfTiles(); i++) {
+		maxSize = (this->accumMemPressVec[i].size() > maxSize) ? this->accumMemPressVec[i].size() : maxSize;
+	}
+	for (int a = 0; a < maxSize; a++) {
+		Int accum = 0;
+		bool insertionFlag = true;
+		for (int i = 0; i < this->tfh->getNumOfTiles(); i++) {
+			if(this->accumMemPressVec[i].size() < a) {
+				insertionFlag = false;
+				break;
+			}
+			accum += this->accumMemPressVec[i][a];
+		}
+		//cout << endl;
+		if(insertionFlag) {
+			accumPress.push_back(accum);
+		}
+	}
+	
+	double accum = 0;
+	for (int i = 0; i < accumPress.size(); i++) {
+		accum += accumPress[i];
+	}
+	double average = accum / accumPress.size();
+	
+	double dAccum = 0;
+	for (int i = 0; i < accumPress.size(); i++) {
+		dAccum += pow(average - accumPress[i], 2);
+	}
+	double stdDev = (dAccum / accumPress.size());
+	
+	cout << idCurrFrame << ";" << (average/(1024*1024)) << ";" << (LLInt)(stdDev/(1024*1024)) << endl;
+	
+	for (int i = 0; i < this->tfh->getNumOfTiles(); i++) {
+		this->accumMemPressVec[i].clear();
+	}
+
+	
 }

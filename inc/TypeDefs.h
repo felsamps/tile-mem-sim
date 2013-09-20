@@ -2,6 +2,15 @@
 #define	TYPEDEFS_H
 
 typedef int Int;
+typedef long long int LLInt;
+
+#define CTU_SIZE 64
+#define CU_32_SIZE 32
+
+#define TILE_CLASS_FACTOR 0
+#define N_BASE_CONST 6
+#define N_G_CONST 5
+#define BASE_NUMBER_OF_GROUPS 8
 
 enum PartSize
 {

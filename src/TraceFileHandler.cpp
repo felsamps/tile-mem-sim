@@ -1,7 +1,8 @@
 #include "../inc/TraceFileHandler.h"
 
-TraceFileHandler::TraceFileHandler(string name) {
+TraceFileHandler::TraceFileHandler(string name, Int numOfFrames) {
 	this->fp.open(name.c_str(), fstream::in);		
+	this->numOfFrames = numOfFrames;
 	this->xParseHeader();
 }
 
@@ -11,6 +12,12 @@ void TraceFileHandler::xParseHeader() {
 	this->fp >> this->numTileColumns;
 	this->fp >> this->numTileRows;
 	this->fp >> this->searchRange;
+	
+	this->wFrameInCTU = ceil(this->wFrame / (double)CTU_SIZE);
+	this->hFrameInCTU = ceil(this->hFrame / (double)CTU_SIZE);
+	this->wFrameInCU32 = this->wFrameInCTU * 2;
+	this->hFrameInCU32 = this->hFrameInCTU * 2;
+
 		
 	this->numOfTiles = this->numTileColumns * this->numTileRows;
 	this->numVerTilesBoundaries = this->numTileColumns - 1;
@@ -138,4 +145,28 @@ Int TraceFileHandler::getHFrame() const {
 
 Int TraceFileHandler::getWFrame() const {
 	return wFrame;
+}
+
+void TraceFileHandler::setHFrameInCU32(Int hFrameInCU32) {
+	this->hFrameInCU32 = hFrameInCU32;
+}
+
+Int TraceFileHandler::getHFrameInCU32() const {
+	return hFrameInCU32;
+}
+
+Int TraceFileHandler::getWFrameInCU32() const {
+	return wFrameInCU32;
+}
+
+Int TraceFileHandler::getWFrameInCTU() const {
+	return wFrameInCTU;
+}
+
+Int TraceFileHandler::getHFrameInCTU() const {
+	return hFrameInCTU;
+}
+
+Int TraceFileHandler::getNumOfFrames() const {
+	return numOfFrames;
 }

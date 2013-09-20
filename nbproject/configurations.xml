@@ -3,21 +3,27 @@
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df name="inc" root="inc">
       <in>CTUData.h</in>
+      <in>CTUGroup.h</in>
       <in>CUData.h</in>
       <in>Entry.h</in>
+      <in>MemPredictionHandler.h</in>
       <in>MotionEstimationData.h</in>
       <in>PUData.h</in>
-      <in>TileAccessAnalyzer.h</in>
+      <in>SearchEngine.h</in>
+      <in>Tile.h</in>
       <in>TileData.h</in>
       <in>TraceFileHandler.h</in>
       <in>TypeDefs.h</in>
     </df>
     <df name="src" root="src">
       <in>CTUData.cpp</in>
+      <in>CTUGroup.cpp</in>
       <in>CUData.cpp</in>
+      <in>MemPredictionHandler.cpp</in>
       <in>MotionEstimationData.cpp</in>
       <in>PUData.cpp</in>
-      <in>TileAccessAnalyzer.cpp</in>
+      <in>SearchEngine.cpp</in>
+      <in>Tile.cpp</in>
       <in>TileData.cpp</in>
       <in>TraceFileHandler.cpp</in>
       <in>main.cpp</in>
